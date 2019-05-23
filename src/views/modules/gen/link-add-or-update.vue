@@ -75,17 +75,17 @@
                     this.$refs['dataForm'].resetFields()
                     if (this.dataForm.id) {
                         this.$http({
-                            url: this.$http.adornUrl(`/gen/genlink/info/${this.dataForm.id}`),
+                            url: this.$http.adornUrl(`/gen/link/info/${this.dataForm.id}`),
                             method: 'get',
                             params: this.$http.adornParams()
                         }).then(({data}) => {
                             if (data && data.code === 0) {
-                                this.dataForm.host = data.genlink.host
-                                this.dataForm.port = data.genlink.port
-                                this.dataForm.baseName = data.genlink.baseName
-                                this.dataForm.username = data.genlink.username
-                                this.dataForm.password = data.genlink.password
-                                this.dataForm.type = data.genlink.type
+                                this.dataForm.host = data.link.host
+                                this.dataForm.port = data.link.port
+                                this.dataForm.baseName = data.link.baseName
+                                this.dataForm.username = data.link.username
+                                this.dataForm.password = data.link.password
+                                this.dataForm.type = data.link.type
                             }
                         })
                     }
@@ -96,7 +96,7 @@
                 this.$refs['dataForm'].validate((valid) => {
                     if (valid) {
                         this.$http({
-                            url: this.$http.adornUrl(`/gen/genlink/${!this.dataForm.id ? 'save' : 'update'}`),
+                            url: this.$http.adornUrl(`/gen/link/${!this.dataForm.id ? 'save' : 'update'}`),
                             method: 'post',
                             data: this.$http.adornData({
                                 'id': this.dataForm.id || undefined,
