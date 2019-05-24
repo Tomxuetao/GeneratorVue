@@ -48,7 +48,7 @@
                 label="创建时间">
             </el-table-column>
         </el-table>
-        <tables-fields v-if="tablesFieldsVisible"></tables-fields>
+        <tables-fields v-if="tablesFieldsVisible" ref="tablesFields"></tables-fields>
     </div>
 </template>
 
@@ -89,18 +89,14 @@
             selectionChangeHandle (val) {
                 this.dataListSelections = val;
             },
+
             showFields () {
                 this.tablesFieldsVisible = true;
-                this.$http({
-                    url: this.$http.adornUrl('/gen/auto/fields'),
-                    method: 'get',
-                    params: this.$http.adornParams({
-                        'id': this.linkId
-                    })
-                }).then(({data}) => {
-                    if (data && data.code === 0) {
-                        this.fieldList = data.fields;
-                    }
+                let tableNameArray = this.dataListSelections.map(item => {
+                    return item.TABLE_NAME
+                })
+                this.$nextTick(() => {
+                    this.$refs.tablesFields.getTableFields(this.linkId, tableNameArray);
                 })
             }
         }
