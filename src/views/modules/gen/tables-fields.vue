@@ -30,6 +30,7 @@
                 }).then(({data}) => {
                     this.visible = true;
                     if (data && data.code === 0) {
+                        debugger;
                         this.fieldList = data.fields;
                     }
                 })
