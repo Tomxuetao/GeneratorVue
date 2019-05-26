@@ -24,25 +24,25 @@
                 width="55">
             </el-table-column>
             <el-table-column
-                prop="TABLE_NAME"
+                prop="tableName"
                 header-align="center"
                 align="center"
                 label="表名称">
             </el-table-column>
             <el-table-column
-                prop="ENGINE"
+                prop="engine"
                 header-align="center"
                 align="center"
                 label="Engine">
             </el-table-column>
             <el-table-column
-                prop="TABLE_COMMENT"
+                prop="tableComment"
                 header-align="center"
                 align="center"
                 label="表备注">
             </el-table-column>
             <el-table-column
-                prop="CREATE_TIME"
+                prop="createTime"
                 header-align="center"
                 align="center"
                 label="创建时间">
@@ -53,54 +53,54 @@
 </template>
 
 <script>
-    import TablesFields from './tables-fields'
+import TablesFields from './tables-fields'
 
-    export default {
-        name: "tables-info",
-        props: {
-            dataList: {
-                type: Array,
-                required: true
-            },
-            linkId: {
-                type: Number,
-                required: true
-            }
+export default {
+    name: 'tables-info',
+    props: {
+        dataList: {
+            type: Array,
+            required: true
         },
-        components: {
-            TablesFields
+        linkId: {
+            type: Number,
+            required: true
+        }
+    },
+    components: {
+        TablesFields
+    },
+    data () {
+        return {
+            dataForm: {
+                tableName: ''
+            },
+            dataListSelections: [],
+            tablesFieldsVisible: false
+        }
+    },
+    methods: {
+        getDataList () {
+            this.$emit('getDataList', this.linkId, this.dataForm.tableName)
         },
-        data () {
-            return {
-                dataForm: {
-                    tableName: ''
-                },
-                dataListSelections: [],
-                tablesFieldsVisible: false
-            }
+        returnLinkTable () {
+            this.$emit('changeTable')
         },
-        methods: {
-            getDataList () {
-                this.$emit('getDataList', this.linkId, this.dataForm.tableName);
-            },
-            returnLinkTable () {
-                this.$emit('changeTable');
-            },
-            selectionChangeHandle (val) {
-                this.dataListSelections = val;
-            },
+        selectionChangeHandle (val) {
+            this.dataListSelections = val
+        },
 
-            showFields () {
-                this.tablesFieldsVisible = true;
-                let tableNameArray = this.dataListSelections.map(item => {
-                    return item.TABLE_NAME
-                })
-                this.$nextTick(() => {
-                    this.$refs.tablesFields.getTableFields(this.linkId, tableNameArray);
-                })
-            }
+        showFields () {
+            this.tablesFieldsVisible = true
+            let tableNameArray = this.dataListSelections.map(item => {
+                return item.tableName
+            })
+            this.$nextTick(() => {
+                this.$refs.tablesFields.getTableFields(this.linkId, tableNameArray)
+            })
         }
     }
+}
 </script>
 
 <style scoped>
