@@ -59,7 +59,6 @@
 </template>
 
 <script>
-    import axios from 'axios'
 
     export default {
         name: 'tables-fields',
@@ -105,12 +104,22 @@
                 this.$http({
                     url: this.$http.adornUrl('/gen/auto/code'),
                     method: 'post',
+                    responseType: 'blob',
+                    //headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'},
                     data: this.$http.adornData({
                         'columns': this.columnArray.join(),
                         'comments': this.commentArray.join()
                     })
                 }).then(({data}) => {
-
+                    debugger;
+                    let blob = new Blob([data], {type: 'application/octet-stream;charset=utf-8'})
+                    let url = window.URL.createObjectURL(blob)
+                    let link = document.createElement('a')
+                    link.style.display = 'none'
+                    link.href = url
+                    link.setAttribute('download', 'gogen.zip')
+                    document.body.appendChild(link)
+                    link.click()
                 })
             }
         }

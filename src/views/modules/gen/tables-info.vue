@@ -16,6 +16,7 @@
             @selection-change="selectionChangeHandle"
             :data="dataList"
             border
+            :height="documentClientHeight - 242"
             style="width: 100%;">
             <el-table-column
                 type="selection"
@@ -70,15 +71,22 @@ export default {
     components: {
         TablesFields
     },
+
     data () {
         return {
             dataForm: {
                 tableName: ''
             },
             dataListSelections: [],
-            tablesFieldsVisible: false
+            tablesFieldsVisible: false,
+            documentClientHeight: 0
         }
     },
+
+    created () {
+        this.documentClientHeight = this.$store.state.common.documentClientHeight
+    },
+
     methods: {
         getDataList () {
             this.$emit('getDataList', this.linkId, this.dataForm.tableName)

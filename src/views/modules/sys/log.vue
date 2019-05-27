@@ -12,7 +12,7 @@
             :data="dataList"
             border
             v-loading="dataListLoading"
-            height="680"
+            :height="documentClientHeight - 268"
             style="width: 100%">
             <el-table-column
                 prop="id"
@@ -101,7 +101,6 @@ export default {
     created () {
         this.getDataList()
         this.documentClientHeight = this.$store.state.common.documentClientHeight
-        console.log(this.documentClientHeight)
     },
     methods: {
         // 获取数据列表

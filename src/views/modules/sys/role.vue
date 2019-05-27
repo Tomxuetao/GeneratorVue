@@ -15,6 +15,7 @@
         <el-table
             :data="dataList"
             border
+            :height="documentClientHeight - 268"
             v-loading="dataListLoading"
             @selection-change="selectionChangeHandle"
             style="width: 100%;">
@@ -95,7 +96,8 @@ export default {
             totalPage: 0,
             dataListLoading: false,
             dataListSelections: [],
-            addOrUpdateVisible: false
+            addOrUpdateVisible: false,
+            documentClientHeight: 0
         }
     },
     components: {
@@ -103,6 +105,7 @@ export default {
     },
     activated () {
         this.getDataList()
+        this.documentClientHeight = this.$store.state.common.documentClientHeight
     },
     methods: {
         // 获取数据列表
