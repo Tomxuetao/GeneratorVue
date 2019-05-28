@@ -60,70 +60,71 @@
 
 <script>
 
-    export default {
-        name: 'tables-fields',
-        data () {
-            return {
-                visible: false,
-                isForm: '0',
-                fieldObject: {},
-                fieldArray: [],
-                columnArray: [],
-                commentArray: []
-            }
-        },
-        methods: {
-            getTableFields (linkId, tableNames) {
-                this.fieldArray = [];
-                this.$http({
-                    url: this.$http.adornUrl('/gen/auto/fields'),
-                    method: 'get',
-                    params: this.$http.adornParams({
-                        'id': linkId,
-                        'tableNames': tableNames.join(',')
-                    })
-                }).then(({data}) => {
-                    this.visible = true
-                    if (data && data.code === 0) {
-                        this.fieldObject = data.fields;
-                        for (let i = 0; i < tableNames.length; i++) {
-                            this.fieldArray.push(...this.fieldObject[tableNames[i]])
-                        }
+export default {
+    name: 'tables-fields',
+    data () {
+        return {
+            visible: false,
+            isForm: '0',
+            fieldObject: {},
+            fieldArray: [],
+            columnArray: [],
+            commentArray: [],
+            dataTypeArray: []
+        }
+    },
+    methods: {
+        getTableFields (linkId, tableNames) {
+            this.fieldArray = []
+            this.$http({
+                url: this.$http.adornUrl('/gen/auto/fields'),
+                method: 'get',
+                params: this.$http.adornParams({
+                    'id': linkId,
+                    'tableNames': tableNames.join(',')
+                })
+            }).then(({ data }) => {
+                this.visible = true
+                if (data && data.code === 0) {
+                    this.fieldObject = data.fields
+                    for (let i = 0; i < tableNames.length; i++) {
+                        this.fieldArray.push(...this.fieldObject[tableNames[i]])
                     }
-                })
-            },
+                }
+            })
+        },
 
-            selectChangeHandle (selection) {
-                selection.forEach(item => {
-                    this.columnArray.push(item.columnName)
-                    this.commentArray.push(item.columnComment)
-                })
-            },
+        selectChangeHandle (selection) {
+            selection.forEach(item => {
+                this.columnArray.push(item.columnName)
+                this.commentArray.push(item.columnComment)
+                this.dataTypeArray.push(item.dataType)
+            })
+        },
 
-            generatorCode () {
-                this.$http({
-                    url: this.$http.adornUrl('/gen/auto/code'),
-                    method: 'post',
-                    responseType: 'blob',
-                    //headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'},
-                    data: this.$http.adornData({
-                        'columns': this.columnArray.join(),
-                        'comments': this.commentArray.join()
-                    })
-                }).then(({data}) => {
-                    debugger;
-                    let blob = new Blob([data], {type: 'application/octet-stream;charset=utf-8'})
-                    let url = window.URL.createObjectURL(blob)
-                    let link = document.createElement('a')
-                    link.style.display = 'none'
-                    link.href = url
-                    link.setAttribute('download', 'gogen.zip')
-                    document.body.appendChild(link)
-                    link.click()
+        generatorCode () {
+            this.$http({
+                url: this.$http.adornUrl('/gen/auto/code'),
+                method: 'post',
+                responseType: 'blob',
+                data: this.$http.adornData({
+                    'columns': this.columnArray.join(),
+                    'comments': this.commentArray.join(),
+                    'dataType': this.dataTypeArray.join()
                 })
-            }
+            }).then(({ data }) => {
+                let blob = new Blob([data])
+                let url = window.URL.createObjectURL(blob)
+                let link = document.createElement('a')
+                link.style.display = 'none'
+                link.href = url
+                link.setAttribute('download', 'gogen.zip')
+                document.body.appendChild(link)
+                link.click()
+            })
         }
     }
+}
 </script>
 
 <style scoped>
