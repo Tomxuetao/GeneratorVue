@@ -43,13 +43,6 @@
                 width="120"
                 label="字段类型">
             </el-table-column>
-            <el-table-column
-                fixed="right"
-                header-align="center"
-                align="center"
-                width="150"
-                label="isForm">
-            </el-table-column>
         </el-table>
         <span slot="footer" class="dialog-footer">
             <el-button @click="visible = false">取消</el-button>
@@ -70,7 +63,8 @@ export default {
             fieldArray: [],
             columnArray: [],
             commentArray: [],
-            dataTypeArray: []
+            dataTypeArray: [],
+            extraArray: []
         }
     },
     methods: {
@@ -99,6 +93,7 @@ export default {
                 this.columnArray.push(item.columnName)
                 this.commentArray.push(item.columnComment)
                 this.dataTypeArray.push(item.dataType)
+                this.extraArray.push(item.extra)
             })
         },
 
@@ -110,7 +105,8 @@ export default {
                 data: this.$http.adornData({
                     'columns': this.columnArray.join(),
                     'comments': this.commentArray.join(),
-                    'dataType': this.dataTypeArray.join()
+                    'dataTypes': this.dataTypeArray.join(),
+                    'extras': this.extraArray.join()
                 })
             }).then(({ data }) => {
                 let blob = new Blob([data])
