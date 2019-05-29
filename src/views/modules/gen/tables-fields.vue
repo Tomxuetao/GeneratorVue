@@ -93,12 +93,17 @@ export default {
                 this.columnArray.push(item.columnName)
                 this.commentArray.push(item.columnComment)
                 this.dataTypeArray.push(item.dataType)
-                this.extraArray.push(item.extra)
+                if (item.extra === '') {
+                    this.extraArray.push('-')
+                } else {
+                    this.extraArray.push(item.extra)
+                }
             })
         },
 
         generatorCode () {
             this.$http({
+                withCredentials: false,
                 url: this.$http.adornUrl('/gen/auto/code'),
                 method: 'post',
                 responseType: 'blob',
@@ -109,6 +114,7 @@ export default {
                     'extras': this.extraArray.join()
                 })
             }).then(({ data }) => {
+                debugger
                 let blob = new Blob([data])
                 let url = window.URL.createObjectURL(blob)
                 let link = document.createElement('a')
