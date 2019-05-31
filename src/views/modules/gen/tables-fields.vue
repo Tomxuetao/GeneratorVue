@@ -114,7 +114,6 @@ export default {
                     'extras': this.extraArray.join()
                 })
             }).then(({ data }) => {
-                debugger
                 let blob = new Blob([data])
                 let url = window.URL.createObjectURL(blob)
                 let link = document.createElement('a')
