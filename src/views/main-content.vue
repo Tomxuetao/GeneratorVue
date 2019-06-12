@@ -6,7 +6,8 @@
             v-model="mainTabsActiveName"
             :closable="true"
             @tab-click="selectedTabHandle"
-            @tab-remove="removeTabHandle">
+            @tab-remove="removeTabHandle"
+        >
             <el-dropdown class="site-tabs__tools" :show-timeout="0">
                 <i class="el-icon-arrow-down el-icon--right"></i>
                 <el-dropdown-menu slot="dropdown">
@@ -16,17 +17,16 @@
                     <el-dropdown-item @click.native="refresh()">刷新当前标签页</el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
-            <el-tab-pane
-                v-for="item in mainTabs"
-                :key="item.name"
-                :label="item.title"
-                :name="item.name">
+            <el-tab-pane v-for="item in mainTabs" :key="item.name" :label="item.title" :name="item.name">
                 <el-card :body-style="siteContentViewHeight">
                     <iframe
                         v-if="item.type === 'iframe'"
                         :src="item.iframeUrl"
-                        width="100%" height="100%" frameborder="0" scrolling="yes">
-                    </iframe>
+                        width="100%"
+                        height="100%"
+                        frameborder="0"
+                        scrolling="yes"
+                    ></iframe>
                     <keep-alive v-else>
                         <router-view v-if="item.name === mainTabsActiveName"></router-view>
                     </keep-alive>
@@ -84,7 +84,9 @@ export default {
             var height = this.documentClientHeight - 50 - 30 - 2
             if (this.$route.meta.isTab) {
                 height -= 40
-                return isURL(this.$route.meta.iframeUrl) ? { height: height + 'px' } : { minHeight: height + 'px' }
+                return isURL(this.$route.meta.iframeUrl)
+                    ? { height: height + 'px' }
+                    : { minHeight: height + 'px' }
             }
             return { minHeight: height + 'px' }
         }
@@ -94,7 +96,11 @@ export default {
         selectedTabHandle (tab) {
             tab = this.mainTabs.filter(item => item.name === tab.name)
             if (tab.length >= 1) {
-                this.$router.push({ name: tab[0].name, query: tab[0].query, params: tab[0].params })
+                this.$router.push({
+                    name: tab[0].name,
+                    query: tab[0].query,
+                    params: tab[0].params
+                })
             }
         },
         // tabs, 删除tab
@@ -104,9 +110,12 @@ export default {
                 // 当前选中tab被删除
                 if (tabName === this.mainTabsActiveName) {
                     var tab = this.mainTabs[this.mainTabs.length - 1]
-                    this.$router.push({ name: tab.name, query: tab.query, params: tab.params }, () => {
-                        this.mainTabsActiveName = this.$route.name
-                    })
+                    this.$router.push(
+                        { name: tab.name, query: tab.query, params: tab.params },
+                        () => {
+                            this.mainTabsActiveName = this.$route.name
+                        }
+                    )
                 }
             } else {
                 this.menuActiveName = ''
@@ -119,7 +128,9 @@ export default {
         },
         // tabs, 关闭其它
         tabsCloseOtherHandle () {
-            this.mainTabs = this.mainTabs.filter(item => item.name === this.mainTabsActiveName)
+            this.mainTabs = this.mainTabs.filter(
+                item => item.name === this.mainTabsActiveName
+            )
         },
         // tabs, 关闭全部
         tabsCloseAllHandle () {
@@ -132,7 +143,11 @@ export default {
             var tab = this.$route
             this.removeTabHandle(tab.name)
             this.$nextTick(() => {
-                this.$router.push({ name: tab.name, query: tab.query, params: tab.params })
+                this.$router.push({
+                    name: tab.name,
+                    query: tab.query,
+                    params: tab.params
+                })
             })
         }
     }
